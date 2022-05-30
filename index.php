@@ -5,37 +5,64 @@
     <title>Global Twitter</title>
 
     <script src="js/jquery.min.js"></script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <link  rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+    <div id="tweet" tweetID="515490786800963584"></div>
+
     <?php
+    if (!isset($_GET['id'])) {
+        exit;
+    } else {
+        $hashtagId = $_GET['id'];
+    }
+
     require 'bd/connection.php';
 
     $sql = "SELECT t1.id_busquedatweets, t1.id_tweet,t2.text,t2.followers_count,t2.tiene_foto,t3.screen_name as screen_name, t3.profile_image_url as profile_image_url, t3.name as user_name
     FROM `twitter_busquedastweets_tweets` AS t1 
     INNER JOIN `twitter_tweets` AS t2 ON t1.id_tweet = t2.id_tweet
     INNER JOIN `twitter_usuarios` AS t3 ON t2.id_user_twitter = t3.id_user_twitter
-    WHERE t1.id_busquedatweets = '1148' and t1.estado = '1' ORDER BY t2.created_at DESC";
+    WHERE t1.id_busquedatweets = ? and t1.estado = '1' ORDER BY t2.created_at DESC limit 10";
 
-    $queryTweets = $conn->query($sql);
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $hashtagId);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    while ($row = $queryTweets->fetch_assoc()) {
+    $tweets = array();
 
-        $text = $row['text'];
-        $text = preg_replace('/(^|\s)@([a-z0-9_]+)/i', '$1<a href="http://www.twitter.com/$2">@$2</a>', $text);
-        $text = preg_replace('/(^|\s)#([a-z0-9_]+)/i','$1<a href="https://twitter.com/hashtag/$2">#$2</a>', $text);
-        $id_busquedatweets = $row['id_busquedatweets'];
-        $imagenprevia = $row['profile_image_url'];
-        $imagen = explode("_normal", $imagenprevia);
+    while ($row = $result->fetch_assoc()) {
         $id_tweet = $row['id_tweet'];
-        $screen_name = $row['screen_name'];
-        $user_name = $row['user_name'];
-        $profile_image = $imagen[0].$imagen[1];
-        $tiene_foto = $row['tiene_foto'];
+        array_push($tweets, $id_tweet);
     }
-
-    $conn->close();
     ?>
+
+    <script>
+        let tweets = <?php echo json_encode($tweets); ?>;
+        let $tweetTemplate = $('.twitter-tweet');
+        let $containter = $('.container');
+
+        for (let i = 0; i < tweets.length; i++) {
+            setTimeout(function () {
+                var tweet = document.getElementById("tweet");
+                var id = tweet.getAttribute(tweets[i]);
+
+                twttr.widgets.createTweet(id, tweet,
+                    {
+                        conversation : 'none',    // or all
+                        cards        : 'hidden',  // or visible
+                        linkColor    : '#cc0000', // default is blue
+                        theme        : 'light'    // or dark
+                    })
+                    .then (function (el) {
+
+                    });
+            }, 1000);
+        }
+
+    </script>
 </body>
 </html>
