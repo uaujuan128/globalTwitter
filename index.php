@@ -10,10 +10,18 @@
 </head>
 
 <body>
+    <?php include 'controller/getTweets.php' ?>
+
+    <?php
+        echo $twitterUsers . ' tsuarios que han tuiteado.<br><br>';
+        echo $totalTweets . ' tweets totales <br><br>';
+        echo $reach . ' alcance total.<br><br>';
+    ?>
     <div id="tweet"></div>
 
+
     <script>
-        let tweets = <?php include 'controller/getTweets.php' ?>;
+        let tweets = <?php echo json_encode($tweets) ?>;
         let i = 0;
 
         function setTweet() {
