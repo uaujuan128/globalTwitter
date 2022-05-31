@@ -5,7 +5,7 @@ if (!isset($_GET['id'])) {
     $hashtagId = $_GET['id'];
 }
 
-require 'bd/connection.php';
+require '../bd/connection.php';
 
 $sql = "SELECT t1.id_busquedatweets, t1.id_tweet,t2.text,t2.followers_count,t2.tiene_foto,t3.screen_name as screen_name, t3.profile_image_url as profile_image_url, t3.name as user_name
     FROM `twitter_busquedastweets_tweets` AS t1 

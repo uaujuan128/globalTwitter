@@ -13,7 +13,7 @@
     <div id="tweet"></div>
 
     <script>
-        let tweets = <?php include 'controller/getTweets.php' ?>;
+        let tweets;
         let i = 0;
 
         function setTweet() {
@@ -31,13 +31,33 @@
 
                 i++;
             } else {
-                location.reload();
+                getTweets();
+                i = 0;
             }
         }
 
+        function getTweets() {
+            $.ajax({
+                context: this,
+                async: false,
+                url: 'controller/getTweets.php',
+                type: 'GET',
+                dataType: 'JSON',
+                data: {id: <?php echo $_GET["id"] ?>}
+            })
+                .done(function(data) {
+                    tweets = data;
+                })
+                .fail(function() {
+                    alert('Ha habido un error');
+                })
+            ;
+        }
+
         $(document).ready(function () {
+            getTweets();
             setTweet();
-            setInterval(setTweet, 5000);
+            setInterval(setTweet, 15000);
         });
     </script>
 </body>
