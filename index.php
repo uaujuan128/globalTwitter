@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Global Twitter</title>
-
+    <script src="js/widgets.js" charset="utf-8"></script>
     <script src="js/jquery.min.js"></script>
-    <script async src="js/widgets.js" charset="utf-8"></script>
+
     <link  rel="stylesheet" href="css/style.css">
 </head>
 
@@ -14,13 +14,11 @@
 
     <script>
         let tweets = <?php include 'controller/getTweets.php' ?>;
-        let $tweetTemplate = $('.twitter-tweet');
-        let $containter = $('.container');
         let i = 0;
 
         function setTweet() {
             if (i < tweets.length) {
-                var tweet = $('#tweet')[0];
+                let tweet = document.getElementById("tweet");
                 tweet.innerHTML = '';
 
                 twttr.widgets.createTweet(tweets[i], tweet,
