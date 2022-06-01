@@ -11,11 +11,12 @@
 
 <body>
     <?php include 'controller/getTweets.php' ?>
-
+    <?php include 'controller/dateAPI.php' ?>
     <?php
         echo $twitterUsers . ' tsuarios que han tuiteado.<br><br>';
         echo $totalTweets . ' tweets totales <br><br>';
         echo $reach . ' alcance total.<br><br>';
+        echo strtotime(date("h:i:sa")) - strtotime($fecha)  . ' fecha de ultimo tweet.<br><br>';
     ?>
     <div id="tweet"></div>
 
