@@ -23,19 +23,21 @@
     <script>
         let tweets = <?php echo json_encode($tweets) ?>;
         let i = 0;
+        let tweet = $('#tweet')[0];
 
         function setTweet() {
             if (i < tweets.length) {
-                let tweet = document.getElementById("tweet");
                 tweet.innerHTML = '';
 
-                twttr.widgets.createTweet(tweets[i], tweet,
-                    {
+                twttr.widgets.createTweet(tweets[i], tweet, {
                         conversation : 'none',
                         cards        : 'visible',
                         linkColor    : '#cc0000',
                         theme        : 'light'
-                    })
+                    }).then (function (el) {
+                        $(tweet).hide();
+                        $(tweet).show(300);
+                    });
 
                 i++;
             } else {
@@ -45,7 +47,7 @@
 
         $(document).ready(function () {
             setTweet();
-            setInterval(setTweet, 5000);
+            setInterval(setTweet, 3000);
         });
     </script>
 </body>

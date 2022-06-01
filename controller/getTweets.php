@@ -12,7 +12,7 @@ $sql = "SELECT t1.id_busquedatweets, t1.id_tweet,t2.text,t2.followers_count,t2.t
     FROM `twitter_busquedastweets_tweets` AS t1 
     INNER JOIN `twitter_tweets` AS t2 ON t1.id_tweet = t2.id_tweet
     INNER JOIN `twitter_usuarios` AS t3 ON t2.id_user_twitter = t3.id_user_twitter
-    WHERE t1.id_busquedatweets = ? and t1.estado = '1' ORDER BY t2.created_at DESC limit 3";
+    WHERE t1.id_busquedatweets = ? and t1.estado = '1' ORDER BY t2.created_at DESC limit 5";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $hashtagId);
